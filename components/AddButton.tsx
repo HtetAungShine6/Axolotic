@@ -6,7 +6,7 @@ const AddButton = () => {
     return (
         <View
             style={{
-                top: -20,
+                top: -30,
                 justifyContent: 'center',
                 alignItems: 'center',
                 shadowColor: '#000',

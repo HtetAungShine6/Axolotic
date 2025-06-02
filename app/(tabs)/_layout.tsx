@@ -1,8 +1,9 @@
-import {View, Image} from "react-native";
+import {View, Image, TouchableOpacity} from "react-native";
 import {Tabs} from "expo-router";
 import {icons} from "@/constants/icons";
 import {colors} from "@/constants/colors";
 import AddButton from "@/components/AddButton";
+import Add from "@/app/(tabs)/add";
 
 const TabIcon = ({focused, title, icon}: any) => {
     if (focused) {
@@ -70,8 +71,15 @@ const _Layout = () => {
                     name="add"
                     options={{
                         title: "",
-                        tabBarIcon: () => (
-                            <AddButton/>
+                        tabBarButton: (props) => (
+                            <TouchableOpacity
+                                style={props.style}
+                                onPress={() => {
+                                    console.log("Add button pressed!");
+                                }}
+                            >
+                                <AddButton />
+                            </TouchableOpacity>
                         ),
                     }}
                 />
