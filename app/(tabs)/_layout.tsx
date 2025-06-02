@@ -3,7 +3,7 @@ import {Tabs} from "expo-router";
 import {icons} from "@/constants/icons";
 import {colors} from "@/constants/colors";
 import AddButton from "@/components/AddButton";
-import Add from "@/app/(tabs)/add";
+import useLogin from "@/presentation/hooks/useLogin";
 
 const TabIcon = ({focused, title, icon}: any) => {
     if (focused) {
@@ -30,6 +30,26 @@ const TabIcon = ({focused, title, icon}: any) => {
 };
 
 const _Layout = () => {
+
+    const { login, loading, error } = useLogin();
+
+    const handleAddButtonPress = async () => {
+        console.log("Add button pressed - starting login...");
+
+        try {
+            // Test credentials - replace with actual values
+            const response = await login({
+                email: "lynn@example.com",
+                password: "password123"
+            });
+
+            console.log("✅ Login successful from AddButton!");
+            console.log("Response:", response);
+        } catch (error) {
+            console.log("❌ Login failed from AddButton:", error);
+        }
+    };
+
     return (
         <>
             <Tabs
@@ -74,9 +94,8 @@ const _Layout = () => {
                         tabBarButton: (props) => (
                             <TouchableOpacity
                                 style={props.style}
-                                onPress={() => {
-                                    console.log("Add button pressed!");
-                                }}
+                                onPress={handleAddButtonPress}
+                                disabled={loading}
                             >
                                 <AddButton />
                             </TouchableOpacity>

@@ -2,7 +2,11 @@ import { colors } from "@/constants/colors"
 import { View, Image } from "react-native"
 import {icons} from "@/constants/icons";
 
-const AddButton = () => {
+interface AddButtonProps {
+    onPress?: () => void;
+}
+
+const AddButton = ({ onPress }: AddButtonProps) => {
     return (
         <View
             style={{
