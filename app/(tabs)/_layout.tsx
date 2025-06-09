@@ -1,37 +1,61 @@
-import {View, Image, TouchableOpacity} from "react-native";
+import {View, Image, TouchableOpacity, Text} from "react-native";
 import {Tabs} from "expo-router";
 import {icons} from "@/constants/icons";
 import {colors} from "@/constants/colors";
-import AddButton from "@/components/AddButton";
-import useLogin from "@/presentation/hooks/useLogin";
+import AddButton from "@/presentation/components/AddButton";
+import useLogin from "@/presentation/viewmodels/hooks/useLogin";
+import {AuthInterface} from "@/domain/interfaces/auth/AuthInterface";
+import {AuthRepositoryImpl} from "@/infrastructure/data/auth/AuthRepositoryImpl";
+import {LoginUseCase} from "@/application/usecases/auth/LoginUseCase";
+import {AuthService} from "@/application/services/authService";
+import {MockAuthRepository} from "@/mock/MockRepo";
+import {Ionicons} from "@expo/vector-icons";
 
-const TabIcon = ({focused, title, icon}: any) => {
-    if (focused) {
-        return (
-            <View className="size-full justify-center items-center mt-4 rounded-full">
-                <Image
-                    source={icon}
-                    className="size-10"
-                    style={{tintColor: colors.primary}}
-                />
-            </View>
-        );
-    } else {
-        return (
-            <View className="size-full justify-center items-center mt-4 rounded-full">
-                <Image
-                    source={icon}
-                    className="size-10"
-                    style={{tintColor: colors.idle}}
-                />
-            </View>
-        );
-    }
+// We will use this when we have our own tab bar icons
+// const TabIcon = ({focused, title, icon}: any) => {
+//     if (focused) {
+//         return (
+//             <View className="size-full justify-center items-center mt-4 rounded-full">
+//                 <Image
+//                     source={icon}
+//                     className="w-6 h-6 mb-1"
+//                     style={{tintColor: colors.primary}}
+//                 />
+//             </View>
+//         );
+//     } else {
+//         return (
+//             <View className="size-full justify-center items-center mt-4 rounded-full">
+//                 <Image
+//                     source={icon}
+//                     className="w-6 h-6 mb-1"
+//                     style={{tintColor: colors.idle}}
+//                 />
+//             </View>
+//         );
+//     }
+// };
+
+
+const TabIcon = ({ focused, icon }: { focused: boolean; icon: string }) => {
+    return (
+        <View className="items-center justify-center mt-1">
+            <Ionicons
+                // @ts-ignore
+                name={icon}
+                size={24}
+                color={focused ? colors.primary : colors.idle}
+            />
+        </View>
+    );
 };
 
-const _Layout = () => {
+const Layout = () => {
 
-    const { login, loading, error } = useLogin();
+    const authRepo: AuthInterface = new AuthRepositoryImpl()
+    // const authRepoMock: AuthInterface = new MockAuthRepository()
+    const loginUseCase = new LoginUseCase(authRepo);
+    const { login, loading, error } = useLogin(loginUseCase);
 
     const handleAddButtonPress = async () => {
         console.log("Add button pressed - starting login...");
@@ -47,6 +71,10 @@ const _Layout = () => {
             console.log("Response:", response);
         } catch (error) {
             console.log("❌ Login failed from AddButton:", error);
+        }
+
+        if (error) {
+            console.log("<UNK> Login failed!");
         }
     };
 
@@ -73,7 +101,7 @@ const _Layout = () => {
                         title: "Home",
                         headerShown: false,
                         tabBarIcon: ({focused}) => (
-                            <TabIcon focused={focused} title="Home" icon={icons.home}/>
+                            <TabIcon focused={focused} icon="home-outline"/>
                         ),
                     }}
                 />
@@ -83,7 +111,7 @@ const _Layout = () => {
                         title: "Budgets",
                         headerShown: false,
                         tabBarIcon: ({focused}) => (
-                            <TabIcon focused={focused} title="Budgets" icon={icons.budget}/>
+                            <TabIcon focused={focused} icon="wallet-outline"/>
                         ),
                     }}
                 />
@@ -108,7 +136,7 @@ const _Layout = () => {
                         title: "History",
                         headerShown: false,
                         tabBarIcon: ({focused}) => (
-                            <TabIcon focused={focused} title="History" icon={icons.history}/>
+                            <TabIcon focused={focused} icon="time-outline"/>
                         ),
                     }}
                 />
@@ -118,7 +146,7 @@ const _Layout = () => {
                         title: "Profile",
                         headerShown: false,
                         tabBarIcon: ({focused}) => (
-                            <TabIcon focused={focused} title="Profile" icon={icons.profile}/>
+                            <TabIcon focused={focused} icon="person-circle-outline"/>
                         ),
                     }}
                 />
@@ -126,4 +154,4 @@ const _Layout = () => {
         </>
     );
 };
-export default _Layout;
+export default Layout;
