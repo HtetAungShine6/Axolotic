@@ -1,6 +1,21 @@
 
+import { ExpenseUseCase } from "@/application/usecases/expenses/ExpenseUseCase";
+import { TrackerUseCase } from "@/application/usecases/trackers/TrackerUseCase";
+import { ExpenseInterface } from "@/domain/interfaces/expenses/ExpenseInterface";
+import { TrackerInterface } from "@/domain/interfaces/trackers/TrackerInterface";
+import { User } from "@/domain/models/auth/login-response";
+import { ExpenseImpl } from "@/infrastructure/data/expenses/ExpenseImpl";
+import { TrackerImpl } from "@/infrastructure/data/trackers/TrackerImpl";
+import DashboardHeader from "@/presentation/components/dashboard/DashboardHeader";
+import DashboardSummary from "@/presentation/components/dashboard/DashboardSummary";
+import SampleChart from "@/presentation/components/dashboard/SampleChart";
+import TransactionList from "@/presentation/components/dashboard/TransactionList";
+import ErrorDisplay from "@/presentation/components/shared/ErrorDisplay";
+import LoadingIndicator from "@/presentation/components/shared/LoadingIndicator";
+import { useTrackerData } from "@/presentation/viewmodels/hooks/useTrackerData";
+import TokenManager from "@/utils/tokenManager";
 import { router } from "expo-router";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     RefreshControl,
     ScrollView,
@@ -9,20 +24,6 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {useTrackerData} from "@/presentation/viewmodels/hooks/useTrackerData";
-import LoadingIndicator from "@/presentation/components/shared/LoadingIndicator";
-import ErrorDisplay from "@/presentation/components/shared/ErrorDisplay";
-import DashboardSummary from "@/presentation/components/dashboard/DashboardSummary";
-import TransactionList from "@/presentation/components/dashboard/TransactionList";
-import DashboardHeader from "@/presentation/components/dashboard/DashboardHeader";
-import TokenManager from "@/utils/tokenManager";
-import {User} from "@/domain/models/auth/login-response";
-import {TrackerInterface} from "@/domain/interfaces/trackers/TrackerInterface";
-import {TrackerImpl} from "@/infrastructure/data/trackers/TrackerImpl";
-import {TrackerUseCase} from "@/application/usecases/trackers/TrackerUseCase";
-import {ExpenseInterface} from "@/domain/interfaces/expenses/ExpenseInterface";
-import {ExpenseImpl} from "@/infrastructure/data/expenses/ExpenseImpl";
-import {ExpenseUseCase} from "@/application/usecases/expenses/ExpenseUseCase";
 
 const trackerInterface: TrackerInterface = new TrackerImpl();
 const trackerUseCase =  new TrackerUseCase(trackerInterface);
@@ -68,6 +69,7 @@ export default function Index() {
                     totalExpenses={totalExpenses}
                     totalBalance={totalBalance}
                 />
+                <SampleChart />
                 <View>
                     <Text className="text-xl font-bold mb-2">Recent Transactions</Text>
                     <TransactionList expenses={recentExpenses} />
