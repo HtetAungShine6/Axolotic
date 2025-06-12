@@ -40,9 +40,11 @@ export default function Index() {
     hasMoreExpenses,
     refreshing,
     refetch,
+    expenses,
   } = useTrackerData(trackerUseCase, expenseUseCase);
 
   const [user, setUser] = useState<User | null>(null);
+  console.log(expenses);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -68,7 +70,7 @@ export default function Index() {
           totalExpenses={totalExpenses}
           totalBalance={totalBalance}
         />
-        <SampleChart />
+        <SampleChart expenses={expenses} />
         <View>
           <Text className="text-xl font-bold mb-2">Recent Transactions</Text>
           <TransactionList expenses={recentExpenses} />

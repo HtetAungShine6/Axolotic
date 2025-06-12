@@ -2,14 +2,19 @@ import { ExpenseUseCase } from "@/application/usecases/expenses/ExpenseUseCase";
 import { TrackerUseCase } from "@/application/usecases/trackers/TrackerUseCase";
 import { ExpenseInterface } from "@/domain/interfaces/expenses/ExpenseInterface";
 import { TrackerInterface } from "@/domain/interfaces/trackers/TrackerInterface";
+import { Expense } from "@/domain/models/expenses/Expense";
 import { ExpenseImpl } from "@/infrastructure/data/expenses/ExpenseImpl";
 import { TrackerImpl } from "@/infrastructure/data/trackers/TrackerImpl";
-import { useTrackerData } from "@/presentation/viewmodels/hooks/useTrackerData";
 import React from "react";
 import { Text, View, useWindowDimensions } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
-const SampleChart = () => {
+const trackerInterface: TrackerInterface = new TrackerImpl();
+const trackerUseCase = new TrackerUseCase(trackerInterface);
+const expenseInterface: ExpenseInterface = new ExpenseImpl();
+const expenseUseCase = new ExpenseUseCase(expenseInterface);
+
+const SampleChart = ({ expenses }: { expenses: Expense[] }) => {
   const { width: screenWidth } = useWindowDimensions();
 
   const formatNumberWithAbbreviation = (num: number): string => {
@@ -24,24 +29,6 @@ const SampleChart = () => {
     }
     return num.toFixed(2);
   };
-
-  const trackerInterface: TrackerInterface = new TrackerImpl();
-  const trackerUseCase = new TrackerUseCase(trackerInterface);
-  const expenseInterface: ExpenseInterface = new ExpenseImpl();
-  const expenseUseCase = new ExpenseUseCase(expenseInterface);
-
-  const {
-    expenses,
-    totalIncome,
-    totalExpenses,
-    totalBalance,
-    loading,
-    error,
-    recentExpenses,
-    hasMoreExpenses,
-    refreshing,
-    refetch,
-  } = useTrackerData(trackerUseCase, expenseUseCase);
 
   // Calculate available width (accounting for padding and margins)
   const availableWidth = screenWidth - 32; // 32 = p-4 (16px padding on each side)
@@ -74,8 +61,8 @@ const SampleChart = () => {
   startDate.setHours(0, 0, 0, 0);
 
   expenses
-    .filter((expense) => new Date(expense.dateTime) >= startDate)
-    .forEach((expense) => {
+    ?.filter((expense) => new Date(expense.dateTime) >= startDate)
+    ?.forEach((expense) => {
       const expenseDateKey = new Date(expense.dateTime)
         .toISOString()
         .split("T")[0];
