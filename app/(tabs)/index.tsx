@@ -1,8 +1,11 @@
+import { BudgetUseCase } from "@/application/usecases/budgets/BudgetUseCase";
 import { ExpenseUseCase } from "@/application/usecases/expenses/ExpenseUseCase";
 import { TrackerUseCase } from "@/application/usecases/trackers/TrackerUseCase";
+import { BudgetInterface } from "@/domain/interfaces/budgets/BudgetInterface";
 import { ExpenseInterface } from "@/domain/interfaces/expenses/ExpenseInterface";
 import { TrackerInterface } from "@/domain/interfaces/trackers/TrackerInterface";
 import { User } from "@/domain/models/auth/login-response";
+import { BudgetImpl } from "@/infrastructure/data/budgets/BudgetImpl";
 import { ExpenseImpl } from "@/infrastructure/data/expenses/ExpenseImpl";
 import { TrackerImpl } from "@/infrastructure/data/trackers/TrackerImpl";
 import DashboardHeader from "@/presentation/components/dashboard/DashboardHeader";
@@ -28,6 +31,8 @@ const trackerInterface: TrackerInterface = new TrackerImpl();
 const trackerUseCase = new TrackerUseCase(trackerInterface);
 const expenseInterface: ExpenseInterface = new ExpenseImpl();
 const expenseUseCase = new ExpenseUseCase(expenseInterface);
+const budgetInterface: BudgetInterface = new BudgetImpl();
+const budgetUseCase = new BudgetUseCase(budgetInterface);
 
 export default function Index() {
   const {
@@ -41,7 +46,8 @@ export default function Index() {
     refreshing,
     refetch,
     expenses,
-  } = useTrackerData(trackerUseCase, expenseUseCase);
+    budgets,
+  } = useTrackerData(trackerUseCase, expenseUseCase, budgetUseCase);
 
   const [user, setUser] = useState<User | null>(null);
   console.log(expenses);
@@ -64,20 +70,33 @@ export default function Index() {
     }
 
     return (
-      <View className="flex-1 flex-col gap-4 pb-24">
+      <View className="flex-1 flex-col gap-8 pb-24">
         <DashboardSummary
           totalIncome={totalIncome}
           totalExpenses={totalExpenses}
           totalBalance={totalBalance}
         />
         <SampleChart expenses={expenses} />
-        <View>
-          <Text className="text-xl font-bold mb-2">Recent Transactions</Text>
+        <View className="flex-col gap-4">
+          <Text className="text-xl font-bold">Budgets</Text>
+          {budgets.map((budget) => (
+            <View key={budget._id} className="flex-row justify-between">
+              <Text>{budget.name}</Text>
+              <Text>
+                {(budget.budgetAmount - budget.remainingAmount).toFixed(2)}
+                &nbsp;/&nbsp;
+                {budget.budgetAmount.toFixed(2)}&nbsp;THB
+              </Text>
+            </View>
+          ))}
+        </View>
+        <View className="flex-col gap-4">
+          <Text className="text-xl font-bold">Recent Transactions</Text>
           <TransactionList expenses={recentExpenses} />
           {hasMoreExpenses && (
             <TouchableOpacity
               onPress={() => router.push("/(tabs)/history")}
-              className="mt-4 p-3 bg-gray-200 rounded-lg items-center"
+              className="p-3 bg-gray-200 rounded-lg items-center"
             >
               <Text className="font-semibold text-gray-700">See More</Text>
             </TouchableOpacity>
