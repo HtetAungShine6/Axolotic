@@ -8,6 +8,7 @@ import { User } from "@/domain/models/auth/login-response";
 import { BudgetImpl } from "@/infrastructure/data/budgets/BudgetImpl";
 import { ExpenseImpl } from "@/infrastructure/data/expenses/ExpenseImpl";
 import { TrackerImpl } from "@/infrastructure/data/trackers/TrackerImpl";
+import BudgetChart from "@/presentation/components/dashboard/BudgetChart";
 import DashboardHeader from "@/presentation/components/dashboard/DashboardHeader";
 import DashboardSummary from "@/presentation/components/dashboard/DashboardSummary";
 import SampleChart from "@/presentation/components/dashboard/SampleChart";
@@ -50,7 +51,6 @@ export default function Index() {
   } = useTrackerData(trackerUseCase, expenseUseCase, budgetUseCase);
 
   const [user, setUser] = useState<User | null>(null);
-  console.log(expenses);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -77,6 +77,7 @@ export default function Index() {
           totalBalance={totalBalance}
         />
         <SampleChart expenses={expenses} />
+        <BudgetChart budgets={budgets} />
         <View className="flex-col gap-4">
           <Text className="text-xl font-bold">Budgets</Text>
           {budgets.map((budget) => (
