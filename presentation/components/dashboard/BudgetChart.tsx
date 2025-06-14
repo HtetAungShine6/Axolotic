@@ -9,15 +9,17 @@ interface BudgetChartProps {
 }
 
 const colors = [
-  "#FF3B30",
-  "#FF9500",
-  "#FFCC00",
-  "#34C759",
-  "#5AC8FA",
-  "#007AFF",
-  "#5856D6",
-  "#AF52DE",
-  "#00C7BE",
+  "#00D4FF", // Electric Cyan
+  "#FF1744", // Bright Red
+  "#00E676", // Neon Green
+  "#9C27B0", // Vivid Purple
+  "#FFD600", // Bright Yellow
+  "#2196F3", // Electric Blue
+  "#FF4081", // Hot Pink
+  "#4CAF50", // Vivid Green
+  "#FF6B35", // Vibrant Orange-Red
+  "#00BCD4", // Bright Teal
+  "#E91E63", // Magenta
 ];
 
 const BudgetChart: React.FC<BudgetChartProps> = ({ budgets }) => {
@@ -38,7 +40,8 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ budgets }) => {
   const pieData = budgets
     .sort((a, b) => b.budgetAmount - a.budgetAmount)
     .map((budget, index) => {
-      const percentage = (budget.budgetAmount / totalBudget) * 100;
+      const percentage =
+        ((budget.budgetAmount - budget.remainingAmount) / totalBudget) * 100;
       return {
         value: percentage,
         color: colors[index % colors.length],
@@ -49,7 +52,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ budgets }) => {
 
   return (
     <View className="bg-white p-4 rounded-xl shadow-sm">
-      <View className="flex justify-between my-4 gap-1">
+      <View className="flex justify-between mb-4 gap-1">
         <Text className="text-xl font-bold">Spent by Budgets</Text>
         <Text className="text-sm text-gray-500">
           Last Updated: {new Date().toLocaleDateString()}
@@ -104,7 +107,7 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ budgets }) => {
                 marginRight: 8,
               }}
             />
-            <Text className="text-gray-700 font-semibold">
+            <Text className="text-gray-700 font-semibold text-sm">
               {item.label} - {item.text}
             </Text>
           </View>
@@ -113,15 +116,26 @@ const BudgetChart: React.FC<BudgetChartProps> = ({ budgets }) => {
         <View className="flex-col items-center gap-2 p-2">
           <View className="w-full flex-row justify-between">
             <Text className="text-gray-700 font-semibold">Set Budget:</Text>
-            <Text> {totalBudget.toFixed(2)} THB</Text>
+            <Text>
+              {" "}
+              {totalBudget.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} THB
+            </Text>
           </View>
           <View className="w-full flex-row justify-between">
             <Text className="text-gray-700 font-semibold">Total Spent:</Text>
-            <Text> {totalSpent.toFixed(2)} THB</Text>
+            <Text>
+              {" "}
+              {totalSpent.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} THB
+            </Text>
           </View>
           <View className="w-full flex-row justify-between">
             <Text className="text-gray-700 font-semibold">Remaining:</Text>
-            <Text>{(totalBudget - totalSpent).toFixed(2)} THB</Text>
+            <Text>
+              {(totalBudget - totalSpent)
+                .toFixed(2)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+              THB
+            </Text>
           </View>
         </View>
       </View>
