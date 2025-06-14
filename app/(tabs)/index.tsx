@@ -76,8 +76,8 @@ export default function Index() {
           totalExpenses={totalExpenses}
           totalBalance={totalBalance}
         />
-        <SampleChart expenses={expenses} />
         <BudgetChart budgets={budgets} />
+        <SampleChart expenses={expenses} />
         <View className="flex-col gap-4">
           <Text className="text-xl font-bold">Budgets</Text>
           {budgets.map((budget) => (
@@ -93,7 +93,7 @@ export default function Index() {
         </View>
         <View className="flex-col gap-4">
           <Text className="text-xl font-bold">Recent Transactions</Text>
-          <TransactionList expenses={recentExpenses} />
+          <TransactionList expenses={expenses} />
           {hasMoreExpenses && (
             <TouchableOpacity
               onPress={() => router.push("/(tabs)/history")}

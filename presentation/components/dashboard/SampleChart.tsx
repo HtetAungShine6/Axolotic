@@ -106,7 +106,7 @@ const SampleChart = ({ expenses }: { expenses: Expense[] }) => {
           spacing={12}
           height={220}
           barBorderRadius={4}
-          frontColor="#4F378A"
+          frontColor="#9C27B0"
           yAxisExtraHeight={30}
           yAxisThickness={0}
           xAxisThickness={1}

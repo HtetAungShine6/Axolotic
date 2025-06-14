@@ -14,7 +14,7 @@ export const useTrackerData = (
   budgetUseCase: BudgetUseCase
 ) => {
   const { isAuthenticated } = useAuth();
-  const [tracker, setTracker] = useState<Tracker | null>(null);
+  const [tracker, setTracker] = useState<Tracker>();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [loading, setLoading] = useState(true);
