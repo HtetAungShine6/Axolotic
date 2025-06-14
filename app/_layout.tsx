@@ -16,13 +16,15 @@
 //     );
 // }
 import "@/utils/polyfills";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import React from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import "./globals.css";
 
+import { colors } from "@/constants/colors";
 import { AuthProvider, useAuth } from "@/contexts/authContext";
 import LoginScreen from "@/presentation/screens/auth/LoginScreen";
+import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -41,22 +43,48 @@ function LayoutContent() {
   return isAuthenticated ? (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* <Stack.Screen
+      <Stack.Screen
+        name="sendaudio"
+        options={{
+          presentation: "modal",
+          headerShown: true,
+          title: "Record Audio",
+          headerTitleAlign: "left",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
         name="manualInput"
         options={{
           presentation: "modal",
-          headerShown: false,
+          headerShown: true,
           title: "Add Manually",
+          headerTitleAlign: "left",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Stack.Screen
         name="documents"
         options={{
           presentation: "modal",
-          headerShown: false,
+          headerShown: true,
           title: "Add by Document",
+          headerTitleAlign: "left",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color={colors.primary} />
+            </TouchableOpacity>
+          ),
         }}
-      /> */}
+      />
     </Stack>
   ) : (
     <LoginScreen />
