@@ -2,12 +2,12 @@ import { LoginUseCase } from "@/application/usecases/auth/LoginUseCase";
 import { colors } from "@/constants/colors";
 import { AuthInterface } from "@/domain/interfaces/auth/AuthInterface";
 import { AuthRepositoryImpl } from "@/infrastructure/data/auth/AuthRepositoryImpl";
-import AddButton from "@/presentation/components/AddButton";
+import GestureAddButton from "@/presentation/components/GestureAddButton";
 import useLogin from "@/presentation/viewmodels/hooks/useLogin";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs, router } from "expo-router";
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 
 // We will use this when we have our own tab bar icons
 // const TabIcon = ({focused, title, icon}: any) => {
@@ -99,15 +99,7 @@ const Layout = () => {
           options={{
             title: "Add",
             headerShown: false,
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                style={props.style}
-                onPress={handleAddButtonPress}
-                disabled={loading}
-              >
-                <AddButton />
-              </TouchableOpacity>
-            ),
+            tabBarButton: () => <GestureAddButton />,
           }}
         />
         <Tabs.Screen
