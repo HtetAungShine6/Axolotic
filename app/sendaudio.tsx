@@ -224,7 +224,7 @@ const Add = () => {
 
     console.log("Form data prepared:", formData);
 
-    const url = "https://axolotic.app.n8n.cloud/webhook/voice";
+    const url = "https://axolotic.app.n8n.cloud/webhook-test/voice";
 
     try {
       const token = await tokenManager.getToken();
